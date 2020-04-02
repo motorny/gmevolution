@@ -5,7 +5,7 @@ W = 500
 H = 500
 
 field = Field(W * 0.1, H * 0.1, W * 0.9, H * 0.9)
-creatures = [Creature(W * 0.5 , H * 0.5, random(0.5, 2.5), field) for _ in range(10)]
+creatures = [Creature(W * 0.5 , H * 0.5, random(0.2, 1), field) for _ in range(10)]
 foods = [Food(random(W * 0.1, W * 0.9), random(H * 0.1, H * 0.9)) for _ in range(30)]
 field.place_food(foods)
 

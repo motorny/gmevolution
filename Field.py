@@ -34,9 +34,12 @@ class Field():
         self.foods = foods
     
     def nearest_food(self, x, y):
+        
         #index_min = min(range(len(self.food)), key=values.__getitem__)
-        min_index, min_dist = min(enumerate(self.foods), key=lambda x: math.sqrt((x[1].x)**2 +(x[1].y)**2))
-        return self.foods[min_index], min_dist
+        _, food = min(enumerate(self.foods), key=lambda f: math.sqrt((f[1].x - x)**2 +(f[1].y - y)**2))
+
+        return food, math.sqrt((food.x - x)**2 +(food.y - y)**2)
+
         
         
     def check_border(self, xprev, yprev, vx, vy):
