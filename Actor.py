@@ -1,4 +1,4 @@
-
+import math
 
 class BaseActor(object):
     def __init__(self, x, y):
@@ -26,7 +26,7 @@ class Creature(BaseActor):
         fill(230, 50, 0)
         circle(self.x, self.y, 10)
         
-    def _normalize_v(self)
+    def _normalize_v(self):
         cvel = math.sqrt((self.vx)**2 +(self.vy)**2)
         self.vx = self.vx / cvel * self.vel
         self.vy = self.vy / cvel * self.vel
@@ -46,10 +46,11 @@ class Creature(BaseActor):
         # check food
         food, min_dist = self.field.nearest_food(self.x, self.y)
         
-        if min_dist < 30:
+        if min_dist < 30 and not food.eated:
             self.steps_to_turn += int(min_dist / self.vel)
             self.vx = food.x - self.x
             self.vy = food.y - self.y
+            self._normalize_v()
         
         
         if min_dist < 9:
