@@ -23,8 +23,16 @@ class Creature(BaseActor):
         self.steps_to_turn=0
         
     def draw(self):
-        fill(230, 50, 0)
-        circle(self.x, self.y, 10)
+        fill(0, 230, 20)
+        circle(self.x, self.y, 20)    
+        line(self.x + 10, self.y, self.x+20, self.y)
+        line(self.x-10, self.y, self.x-20, self.y)
+        line(self.x, self.y+10, self.x, self.y+20)
+        line(self.x, self.y-10, self.x, self.y-20)
+        line(self.x+6, self.y+6, self.x+16, self.y+16)
+        line(self.x-6, self.y+6, self.x-16, self.y+16)
+        line(self.x+6, self.y-6, self.x+16, self.y-16)
+        line(self.x-6, self.y-6, self.x-16, self.y-16)
         
     def _normalize_v(self):
         cvel = math.sqrt((self.vx)**2 +(self.vy)**2)
@@ -43,17 +51,16 @@ class Creature(BaseActor):
         self.x += vx
         self.y += vy
         
-        # check food
+     # check food
         food, min_dist = self.field.nearest_food(self.x, self.y)
         
-        if min_dist < 30 and not food.eated:
+        if min_dist < 50 and not food.eated:
             self.steps_to_turn += int(min_dist / self.vel)
             self.vx = food.x - self.x
             self.vy = food.y - self.y
             self._normalize_v()
         
-        
-        if min_dist < 9:
+        if min_dist < 29:
             print("I am eating")
             food.eat_it()
             
@@ -63,11 +70,13 @@ class Food(BaseActor):
     def __init__(self, x, y):
         super(Food, self).__init__(x, y)
         self.eated = False
-
+        
     def draw(self):
         if not self.eated:
-            fill(0, 255, 20)
-            circle(self.x, self.y, 7)
-    
+          fill(230, 0, 50)
+          circle(self.x, self.y, 14)
+          fill(250, 250, 250)
+          circle(self.x, self.y, 7)
+          
     def eat_it(self):
         self.eated = True
