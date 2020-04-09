@@ -14,17 +14,23 @@ class BaseActor(object):
         
     
 class Creature(BaseActor):
-    def __init__(self, x, y, vel, field):
+    def __init__(self, x, y, vel, max_energy, field):
         super(Creature, self).__init__(x, y)
         self.vel = vel
         self.field = field
         self.vx = 0
         self.vy = 0
         self.steps_to_turn=0
+        self.pie = 0
+        self.max_energy = max_energy
+        self.cur_energy = max_energy
         
     def draw(self):
-        fill(0, 230, 20)
+        colorMode(HSB, 360, 100, 100)
+        
+        fill(115 * (self.vel - 0.2) / 3.8, 100 , 100)
         circle(self.x, self.y, 20)    
+        colorMode(RGB, 255)
         line(self.x + 10, self.y, self.x+20, self.y)
         line(self.x-10, self.y, self.x-20, self.y)
         line(self.x, self.y+10, self.x, self.y+20)
@@ -40,6 +46,8 @@ class Creature(BaseActor):
         self.vy = self.vy / cvel * self.vel
     
     def step(self):
+        if self.cur_energy <= 0:
+            return
         self.steps_to_turn -= 1
         if self.steps_to_turn <= 0:
             angle = random(2 * PI)
@@ -51,6 +59,8 @@ class Creature(BaseActor):
         self.x += vx
         self.y += vy
         
+        self.cur_energy -=  0.01 * self.vel ** 2
+        
      # check food
         food, min_dist = self.field.nearest_food(self.x, self.y)
         
@@ -60,10 +70,12 @@ class Creature(BaseActor):
             self.vy = food.y - self.y
             self._normalize_v()
         
-        if min_dist < 29:
-            print("I am eating")
+        if min_dist < 29 and not food.eated:
+            self.pie += 1
             food.eat_it()
             
+    def survive(self):
+        return self.pie >= 1        
             
     
 class Food(BaseActor):
